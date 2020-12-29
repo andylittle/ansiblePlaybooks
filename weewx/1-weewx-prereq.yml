@@ -16,7 +16,8 @@
         - rtl-sdr
         - cmake  
         - git
-        - fail2ban
+        #- fail2ban
+        - ntp
         - rsync  
         #weewx
         - python3-configobj
