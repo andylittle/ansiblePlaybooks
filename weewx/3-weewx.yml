@@ -1,0 +1,40 @@
+---
+  - hosts: orangepi0-3
+    remote_user: root
+    vars:
+        #weewxVersion: 4.2.0   
+        #weewxURL: http://weewx.com/downloads
+        weewxVersion: 4.3.0b3   
+        weewxURL: http://weewx.com/downloads/development_versions
+
+    tasks:
+    
+    - name: Create weewx directory if it does not exist
+      file:
+        path: /home/weewx
+        state: directory
+        mode: '0755'        
+    - name: Download and untar weewx
+      unarchive:
+        src: "{{ weewxURL }}/weewx-{{ weewxVersion }}.tar.gz"
+        dest: /home/weewx
+        remote_src: yes
+    - name: build weewx
+      command: python3 /home/weewx/weewx-{{ weewxVersion }}/setup.py build
+      args:
+        chdir: /home/weewx/weewx-{{ weewxVersion }}
+
+    - name: install weewx
+      command: python3 /home/weewx/weewx-{{ weewxVersion }}/setup.py install --no-prompt
+      args:
+        chdir: /home/weewx/weewx-{{ weewxVersion }}
+
+    - name: download weewx sdr driver 
+      get_url:
+        url: https://github.com/matthewwall/weewx-sdr/archive/master.zip
+        dest: /home/weewx
+
+    - name: install weewx sdr driver 
+      command: /home/weewx/bin/wee_extension --install /home/weewx/weewx-sdr-master.zip
+      args:
+        chdir: /home/weewx

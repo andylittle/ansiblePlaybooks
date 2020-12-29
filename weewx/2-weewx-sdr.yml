@@ -1,0 +1,25 @@
+---
+  - hosts: orangepi0-3
+    remote_user: root
+    ##vars:
+   
+    tasks:
+
+    - name: Clone rtl_433 library      
+      git:
+        repo: https://github.com/merbanan/rtl_433.git
+        dest: /root/rtl_433
+
+    - name: Create rtl build dir    
+      file:
+        path: /root/rtl_433/build
+        state: directory
+        ## mode: 0755
+      
+    - name: build
+      command: "{{ item }} chdir=/root/rtl_433/build"
+      with_items:
+        - cmake ../
+        - make    
+        - make install   
+
