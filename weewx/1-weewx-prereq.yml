@@ -1,0 +1,37 @@
+---
+  - hosts:  orangepi0-3
+    remote_user: root
+    ##vars:
+   
+    tasks:
+
+    - name: Install basic packages for rtl_433
+      package: name={{ item }} state=present
+      with_items:
+        - tcpdump
+        - vim 
+        - libtool
+        - libusb-1.0-0-dev 
+        - librtlsdr-dev 
+        - rtl-sdr
+        - cmake  
+        - git
+        - fail2ban
+        - rsync  
+        #weewx
+        - python3-configobj
+        - python3-pil
+        #- python3-serial
+        #- python3-usb  
+        - python3-pip
+        - python3-ephem  
+        - python3-cheetah
+        - mariadb-client
+        - python3-mysqldb  
+
+
+    - name: Remove Uneeded packages
+      package: name={{ item }} state=absent
+      with_items:
+        - nano
+
